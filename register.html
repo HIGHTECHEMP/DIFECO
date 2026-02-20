@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | DIFECO</title>
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-body">
+    <header class="auth-header">
+        <div class="logo">DIFECO</div>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-box">
+            <h1>Create Account</h1>
+            <p class="auth-subtitle">Join the DIFECO family for exclusive deals and rewards</p>
+            
+            <form id="register-form" class="auth-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="reg-name" placeholder="Full Name" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="reg-email" placeholder="Email Address" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="reg-password" placeholder="Password" required>
+                </div>
+                
+                <button type="submit">Create Account</button>
+            </form>
+
+            <div class="social-login">
+                <p>Or sign up with</p>
+                <div class="social-buttons">
+                    <button class="social-btn"><i class="fab fa-google"></i></button>
+                    <button class="social-btn"><i class="fab fa-facebook-f"></i></button>
+                    <button class="social-btn"><i class="fab fa-apple"></i></button>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById("register-form").addEventListener("submit", function(e){
+            e.preventDefault();
+            
+            const name = document.getElementById("reg-name").value;
+            const email = document.getElementById("reg-email").value;
+            const password = document.getElementById("reg-password").value;
+
+            // Get existing users
+            let users = JSON.parse(localStorage.getItem("DIFECO_users") || "[]");
+            
+            if(users.find(u => u.email === email)){
+                alert("Email already registered!");
+                return;
+            }
+
+            // Create new user with avatar
+            const newUser = {
+                name: name,
+                email: email,
+                password: password,
+                avatar: generateAvatar(name),
+                joinDate: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem("DIFECO_users", JSON.stringify(users));
+            
+            // Auto login
+            currentUser = {...newUser, isAdmin: false};
+            sessionStorage.setItem("DIFECO_user", JSON.stringify(currentUser));
+            
+            alert("Registration successful! Welcome to DIFECO.");
+            window.location.href = "shop.html";
+        });
+    </script>
+</body>
+</html>

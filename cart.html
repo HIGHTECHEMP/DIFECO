@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | DIFECO</title>
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="cart-page">
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-left">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">DIFECO</div>
+        </div>
+        
+        <nav class="desktop-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+            <a href="cart.html" class="icon-btn cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count" class="badge">0</span>
+            </a>
+            <div class="user-menu" id="user-menu"></div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button class="close-menu" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+        </ul>
+    </div>
+
+    <!-- Cart Content -->
+    <main class="cart-container">
+        <h1 class="cart-title">Shopping Cart</h1>
+        
+        <div class="cart-content">
+            <!-- Cart Items -->
+            <section class="cart-items-section">
+                <div id="cart-items">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Order Summary -->
+            <aside class="order-summary">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">₦0</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: #28a745;">Free</span>
+                </div>
+                
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="final-total">₦0</span>
+                </div>
+
+                <div class="promo-code">
+                    <input type="text" placeholder="Enter promo code">
+                    <button class="apply-btn">Apply</button>
+                </div>
+
+                <a href="checkout.html" class="checkout-btn">
+                    Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                </a>
+                
+                <a href="shop.html" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="modern-footer" style="margin-top: 60px;">
+        <div class="footer-bottom" style="border-top: none; justify-content: center;">
+            <p>&copy; 2024 DIFECO. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

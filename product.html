@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIFECO Product</title>
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <div class="logo">DIFECO</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="product-detail" id="product-detail"></section>
+</main>
+
+<!-- Floating Cart -->
+<a href="cart.html" id="floating-cart">
+    <img src="assets/icons/cart.png" alt="Cart" style="width:40px; height:40px;">
+    <span id="cart-count">0</span>
+</a>
+
+<script src="js/main.js"></script>
+<script>
+const user = JSON.parse(sessionStorage.getItem("DIFECO_user")||"null");
+if(!user) window.location.href="login.html";
+
+const productDetail = document.getElementById("product-detail");
+const urlParams = new URLSearchParams(window.location.search);
+const productId = parseInt(urlParams.get("id"));
+const product = featuredProducts.find(p=>p.id===productId);
+
+if(product){
+    productDetail.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" style="width:300px;">
+        <h2>${product.name}</h2>
+        <p>Category: ${product.category}</p>
+        <p>Price: ₦${product.price.toLocaleString()}</p>
+        <label>Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1">
+        <button id="add-to-cart">Add to Cart</button>
+    `;
+    document.getElementById("add-to-cart").addEventListener("click", ()=>{
+        const qty = parseInt(document.getElementById("quantity").value);
+        for(let i=0;i<qty;i++) cart.push(product);
+        saveCart();
+        updateCartCount();
+        alert(`${product.name} added to cart (${qty})!`);
+    });
+} else {
+    productDetail.innerHTML="<p>Product not found.</p>";
+}
+</script>
+</body>
+</html>

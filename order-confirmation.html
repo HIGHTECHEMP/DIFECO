@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIFECO Order Confirmation</title>
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Extra styles for order tracking */
+        .order-summary {
+            padding: 30px 5%;
+        }
+
+        .order-summary h2 {
+            margin-bottom: 20px;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .tracking-status {
+            margin-top: 20px;
+        }
+
+        .tracking-status span {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 10px;
+            background: #eee;
+            color: #555;
+        }
+
+        .tracking-status .active {
+            background: #FFD700;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">DIFECO</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="cart.html">Cart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="order-summary">
+    <h1>Order Confirmation</h1>
+    <p>Thank you for shopping with DIFECO! Your order details are below:</p>
+
+    <div id="order-details"></div>
+
+    <div class="tracking-status" id="tracking-status">
+        <span id="status-pending">Pending</span>
+        <span id="status-shipped">Shipped</span>
+        <span id="status-delivered">Delivered</span>
+    </div>
+</main>
+
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+<script>
+    const orderDetailsDiv = document.getElementById("order-details");
+    const trackingSpans = {
+        "Pending": document.getElementById("status-pending"),
+        "Shipped": document.getElementById("status-shipped"),
+        "Delivered": document.getElementById("status-delivered")
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = parseInt(urlParams.get('orderId'));
+
+    const order = orders.find(o => o.id === orderId);
+
+    if(order) {
+        // Display order details
+        let itemsHtml = "";
+        order.items.forEach(item => {
+            itemsHtml += `<div class="order-item">
+                <strong>${item.name}</strong> - ₦${item.price.toLocaleString()}
+            </div>`;
+        });
+
+        orderDetailsDiv.innerHTML = `
+            <h2>Order ID: ${order.id}</h2>
+            <p><strong>Name:</strong> ${order.customer}</p>
+            <p><strong>Email:</strong> ${order.email}</p>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <p><strong>Address:</strong> ${order.address}</p>
+            <div class="order-items">${itemsHtml}</div>
+            <p><strong>Current Status:</strong> ${order.status}</p>
+        `;
+
+        // Highlight tracking status
+        Object.keys(trackingSpans).forEach(status => {
+            trackingSpans[status].classList.remove("active");
+        });
+        if(trackingSpans[order.status]) {
+            trackingSpans[order.status].classList.add("active");
+        }
+
+        // Optional: refresh every 5 seconds to show updates from admin
+        setInterval(() => {
+            if(order.status) {
+                Object.keys(trackingSpans).forEach(status => {
+                    trackingSpans[status].classList.remove("active");
+                });
+                trackingSpans[order.status].classList.add("active");
+            }
+        }, 5000);
+
+    } else {
+        orderDetailsDiv.innerHTML = "<p>Order not found.</p>";
+    }
+</script>
+</body>
+</html>

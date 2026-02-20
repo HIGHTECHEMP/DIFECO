@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIFECO Admin Dashboard</title>
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<!-- Admin Sidebar -->
+<aside class="admin-sidebar">
+    <div class="admin-logo">
+        <h2>DIFECO</h2>
+        <span>Admin Panel</span>
+    </div>
+    <nav class="admin-nav">
+        <a href="#dashboard" class="active" onclick="showSection('dashboard')">
+            <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#products" onclick="showSection('products')">
+            <i class="fas fa-box"></i> Products
+        </a>
+        <a href="#orders" onclick="showSection('orders')">
+            <i class="fas fa-shopping-cart"></i> Orders
+        </a>
+        <a href="#customers" onclick="showSection('customers')">
+            <i class="fas fa-users"></i> Customers
+        </a>
+        <a href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="admin-main">
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="admin-section active">
+        <header class="admin-header">
+            <h1>Dashboard Overview</h1>
+            <div class="admin-user">
+                <span id="admin-name">Admin</span>
+                
+                <img src="assets/images/admin.jpg" alt="Admin" class="admin-avatar">
+                 <li><a href="index.html">Home</a></li>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-orders">0</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e8f5e9; color: #388e3c;">
+                    <i class="fas fa-naira-sign"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-revenue">₦0</h3>
+                    <p>Revenue</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff3e0; color: #f57c00;">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-products">0</h3>
+                    <p>Products</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fce4ec; color: #c2185b;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-customers">0</h3>
+                    <p>Customers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Recent Orders</h3>
+                <div id="recent-orders-list"></div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Low Stock Alert</h3>
+                <div id="low-stock-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products-section" class="admin-section">
+        <header class="admin-header">
+            <h1>Product Management</h1>
+            <button class="btn-primary" onclick="openProductModal()">
+                <i class="fas fa-plus"></i> Add Product
+            </button>
+        </header>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="products-table-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Orders Section -->
+    <section id="orders-section" class="admin-section">
+        <header class="admin-header">
+            <h1>Order Management</h1>
+            <div class="filter-actions">
+                <select id="order-status-filter" onchange="filterOrders()">
+                    <option value="all">All Orders</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Customers Section -->
+    <section id="customers-section" class="admin-section">
+        <header class="admin-header">
+            <h1>Customer Management</h1>
+        </header>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody id="customers-table-body"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Add/Edit Product Modal -->
+<div id="product-modal" class="admin-modal">
+    <div class="modal-content-large">
+        <div class="modal-header">
+            <h2 id="modal-title">Add New Product</h2>
+            <button class="close-modal" onclick="closeProductModal()">&times;</button>
+        </div>
+        <form id="product-form" class="product-form">
+            <input type="hidden" id="product-id">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="product-category" required>
+                        <option value="Jewelry">Jewelry</option>
+                        <option value="Watches">Watches</option>
+                        <option value="Bags">Bags</option>
+                        <option value="Perfumes">Perfumes</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Skincare">Skincare</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (₦) *</label>
+                    <input type="number" id="product-price" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Stock Quantity *</label>
+                    <input type="number" id="product-stock" required min="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="product-description" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Product Image *</label>
+                <div class="image-upload-container">
+                    <div class="image-preview" id="image-preview">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop image here or click to browse</p>
+                        <span>Supports: JPG, PNG, WEBP (Max 5MB)</span>
+                    </div>
+                    <input type="file" id="product-image-file" accept="image/*" onchange="handleImageUpload(this)">
+                    <input type="hidden" id="product-image-base64">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancel</button>
+                <button type="submit" class="btn-primary">Save Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div id="order-modal" class="admin-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Order Details</h2>
+            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+        </div>
+        <div id="order-detail-content"></div>
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

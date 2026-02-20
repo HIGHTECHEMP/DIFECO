@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | DIFECO Luxury Wardrobe</title>
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSss9Iif0i2bU0CYCjDUL62y3Pw7WAPuP0bEg&s">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-left">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">DIFECO</div>
+        </div>
+        
+        <nav class="desktop-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+            <div class="search-container active">
+                <input type="search" id="shop-search" placeholder="Search products..." autocomplete="off">
+                <button onclick="performShopSearch()"><i class="fas fa-search"></i></button>
+                <div id="shop-search-suggestions" class="search-suggestions"></div>
+            </div>
+            <a href="cart.html" class="icon-btn cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count" class="badge">0</span>
+            </a>
+            <div class="user-menu" id="user-menu"></div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <button class="close-menu" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop All</a></li>
+        </ul>
+    </div>
+
+    <!-- Shop Header -->
+    <section class="shop-header">
+        <h1>Shop All Products</h1>
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> / <span>Shop</span>
+        </div>
+    </section>
+
+    <!-- Shop Layout -->
+    <div class="shop-layout">
+        <!-- Sidebar Filters -->
+        <aside class="shop-sidebar">
+            <div class="filter-section">
+                <h3>Categories</h3>
+                <ul class="filter-list" id="category-filters">
+                    <li><label><input type="checkbox" value="All" checked onchange="filterProducts()"> All Products</label></li>
+                    <li><label><input type="checkbox" value="Jewelry" onchange="filterProducts()"> Jewelry</label></li>
+                    <li><label><input type="checkbox" value="Watches" onchange="filterProducts()"> Watches</label></li>
+                    <li><label><input type="checkbox" value="Bags" onchange="filterProducts()"> Bags</label></li>
+                    <li><label><input type="checkbox" value="Perfumes" onchange="filterProducts()"> Perfumes</label></li>
+                    <li><label><input type="checkbox" value="Shoes" onchange="filterProducts()"> Shoes</label></li>
+                    <li><label><input type="checkbox" value="Clothing" onchange="filterProducts()"> Clothing</label></li>
+                    <li><label><input type="checkbox" value="Skincare" onchange="filterProducts()"> Skincare</label></li>
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <h3>Price Range</h3>
+                <div class="price-range">
+                    <input type="range" id="price-range" min="0" max="500000" value="500000" oninput="updatePriceLabel(); filterProducts()">
+                    <div class="price-labels">
+                        <span>₦0</span>
+                        <span id="price-value">₦500,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>Sort By</h3>
+                <select id="sort-select" onchange="sortProducts()">
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name: A-Z</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Product Grid Area -->
+        <main class="shop-main">
+            <div class="shop-toolbar">
+                <p id="results-count">Showing all products</p>
+                <div class="view-toggle">
+                    <button class="active" onclick="setView('grid')"><i class="fas fa-th"></i></button>
+                    <button onclick="setView('list')"><i class="fas fa-list"></i></button>
+                </div>
+            </div>
+
+            <div id="shop-products" class="product-grid-modern">
+                <!-- Products populated by JS -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- No Results State -->
+            <div id="no-results" class="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No products found</h3>
+                <p>Try adjusting your search or filters</p>
+                <button onclick="resetFilters()" class="btn-primary">Clear Filters</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Check login
+        const user = JSON.parse(sessionStorage.getItem("DIFECO_user") || "null");
+        if(!user) window.location.href="login.html";
+
+        // Initialize shop
+        document.addEventListener('DOMContentLoaded', () => {
+            initShop();
+            initShopSearch();
+            
+            // Check for category in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            if(category) {
+                document.querySelectorAll('#category-filters input').forEach(cb => {
+                    cb.checked = cb.value === category;
+                });
+                filterProducts();
+            }
+        });
+    </script>
+</body>
+</html>
